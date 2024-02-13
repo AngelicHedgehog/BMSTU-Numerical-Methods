@@ -1,29 +1,22 @@
+#pragma once
+
 #include <vector>
-#include <random>
 #include <cassert>
-#include <iostream>
+
+#include "SquareMatrix.cpp"
 
 template <typename T, int SIZE, int DIAGS>
 requires (
-    std::is_integral_v<T> &&
     (DIAGS & 1) == 1 &&
     SIZE > (DIAGS >> 1)
 )
-class DiagonalMatrix {
+class DiagonalMatrix final : public SquareMatrix<T, SIZE> {
 public:
-    DiagonalMatrix(const T& minValue, const T& maxValue)
-    : m_matrix(SIZE, std::vector<T>(DIAGS)) {
-
-        #define getRandValue() {rand() % (maxValue - minValue) + minValue};
-
-        for (auto& diagsSlice : m_matrix) {
-            for (auto& element : diagsSlice) {
-                element = getRandValue();
-            }
-        }
+    DiagonalMatrix() {
+        SquareMatrix<T, SIZE>::m_matrix = std::vector<std::vector<T>>(SIZE, std::vector<T>(DIAGS));
     }
 
-    T& at(int i, int j) {
+    auto at(int i, int j) -> T& override final {
         assert(0 <= i && i < SIZE);
         assert(0 <= j && j < SIZE);
 
@@ -31,10 +24,10 @@ public:
             return m_zeroValue;
         }
 
-        return m_matrix[std::min(i, j)][j - i + (DIAGS >> 1)];
+        return SquareMatrix<T, SIZE>::m_matrix[std::min(i, j)][j - i + (DIAGS >> 1)];
     }
 
-    const T& at(int i, int j) const {
+    auto at(int i, int j) const -> const T& override final {
         assert(0 <= i && i < SIZE);
         assert(0 <= j && j < SIZE);
 
@@ -42,26 +35,12 @@ public:
             return m_zeroValue;
         }
 
-        return m_matrix[std::min(i, j)][j - i + (DIAGS >> 1)];
+        return SquareMatrix<T, SIZE>::m_matrix[std::min(i, j)][j - i + (DIAGS >> 1)];
     }
     
 private:
-    std::vector<std::vector<T>> m_matrix;
-    const T m_zeroValue{};
+    T m_zeroValue{};
 };
 
-template <typename T, int SIZE, int DIAGS>
-std::ostream& operator<<(std::ostream& os, const DiagonalMatrix<T, SIZE, DIAGS>& matrix) {
-    for (int i = 0; i != SIZE; ++i) {
-        for (int j = 0; j != SIZE; ++j) {
-            os << matrix.at(i, j);
-            if (j + 1 != SIZE) {
-                os << '\t';
-            }
-        }
-        if (i + 1 != SIZE) {
-            os << '\n';
-        }
-    }
-    return os;
-}
+template <typename T, int SIZE>
+using ThreeDiagonalMatrix = DiagonalMatrix<T, SIZE, 3>;
