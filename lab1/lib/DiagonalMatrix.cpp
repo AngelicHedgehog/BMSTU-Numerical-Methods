@@ -16,6 +16,26 @@ public:
         this->m_matrix = std::vector<std::vector<T>>(SIZE, std::vector<T>(DIAGS));
     }
 
+    DiagonalMatrix(const std::vector<std::vector<T>>& matrix) {
+        assert(matrix.size() == SIZE);
+        for (std::size_t row = 0; row != SIZE; ++row) {
+            assert(matrix[row].size() == SIZE);
+            for (std::size_t col = 0; col != SIZE; ++col) {
+                this->at(row, col) = matrix[row][col];
+            }
+        }
+    }
+
+    auto operator*(const T& coef) const -> DiagonalMatrix<T, SIZE, DIAGS> {
+        DiagonalMatrix<T, SIZE, DIAGS> resMatrix{};
+        for (std::size_t row = 0; row != SIZE; ++row) {
+            for (std::size_t col = 0; col != SIZE; ++col) {
+                resMatrix.at(row, col) = this->at(row, col) * coef;
+            }
+        }
+        return resMatrix;
+    }
+
     auto at(std::size_t i, std::size_t j) -> T& override {
         assert(i < SIZE && j < SIZE);
 

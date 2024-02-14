@@ -15,6 +15,14 @@ class Matrix {
 public:
     Matrix() : m_matrix(HEIGHT, std::vector<T>(WIDTH)) {}
 
+    Matrix(const std::vector<std::vector<T>>& matrix)
+    : m_matrix(matrix) {
+        assert(matrix.size() == HEIGHT);
+        for (const auto& row : matrix) {
+            assert(row.size() == WIDTH);
+        }
+    }
+
     virtual ~Matrix() {};
 
     auto fillRandomValues(const T& minValue, const T& maxValue, const T& stepValue) -> void {

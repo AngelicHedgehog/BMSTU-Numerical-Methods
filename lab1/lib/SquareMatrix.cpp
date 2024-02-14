@@ -14,7 +14,15 @@ public:
                 this->at(row, col) = other.at(row, col);
             }
         }
-    } 
+    }
+
+    SquareMatrix(const std::vector<std::vector<T>>& matrix)
+    : Matrix<T, SIZE, SIZE>::m_matrix(matrix) {
+        assert(matrix.size() == SIZE);
+        for (const auto& row : matrix) {
+            assert(row.size() == SIZE);
+        }
+    }
 
     auto operator*(const Matrix<T, SIZE, SIZE>& other) const -> SquareMatrix<T, SIZE> {
         SquareMatrix<T, SIZE> matrixProduct{};

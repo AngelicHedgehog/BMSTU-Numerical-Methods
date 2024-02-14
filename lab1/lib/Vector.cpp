@@ -13,6 +13,21 @@ public:
         }
     }
 
+    Vector(const std::vector<T>& vector) {
+        assert(vector.size() == SIZE);
+        for (std::size_t row = 0; row != SIZE; ++row) {
+            this->at(row) = vector[row];
+        }
+    }
+
+    auto operator*(const T& coef) const -> Vector<T, SIZE> {
+        Vector<T, SIZE> resMatrix{};
+        for (std::size_t row = 0; row != SIZE; ++row) {
+            resMatrix.at(row) = this->at(row) * coef;
+        }
+        return resMatrix;
+    }
+
     auto at(std::size_t i) -> T& {
         assert(i < SIZE);
         return Matrix<T, SIZE, 1>::at(i, 0);
