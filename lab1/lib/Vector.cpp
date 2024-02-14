@@ -5,6 +5,14 @@
 template< typename T, std::size_t SIZE >
 class Vector : public Matrix<T, SIZE, 1> {
 public:
+    Vector() {}
+
+    Vector(const Matrix<T, SIZE, 1>& other) {
+        for (std::size_t row = 0; row != SIZE; ++row) {
+            this->at(row) = other.at(row, 0);
+        }
+    }
+
     auto at(std::size_t i) -> T& {
         assert(i < SIZE);
         return Matrix<T, SIZE, 1>::at(i, 0);

@@ -6,6 +6,16 @@ template< typename T, std::size_t SIZE >
 requires std::is_floating_point_v<T>
 class SquareMatrix : public Matrix<T, SIZE, SIZE> {
 public:
+    SquareMatrix() {}
+
+    SquareMatrix(const Matrix<T, SIZE, SIZE>& other) {
+        for (std::size_t row = 0; row != SIZE; ++row) {
+            for (std::size_t col = 0; col != SIZE; ++col) {
+                this->at(row, col) = other.at(row, col);
+            }
+        }
+    } 
+
     auto operator*(const Matrix<T, SIZE, SIZE>& other) const -> SquareMatrix<T, SIZE> {
         SquareMatrix<T, SIZE> matrixProduct{};
         for (std::size_t i = 0; i != SIZE; ++i) {

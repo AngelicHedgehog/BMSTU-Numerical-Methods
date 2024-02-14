@@ -56,10 +56,10 @@ auto checkSolve(
     const ThreeDiagonalMatrix<double, SIZE>& A,
     const Vector<double, SIZE>& xStar,
     const Vector<double, SIZE>& d
-) -> Matrix<double, SIZE, 1> {
-    Matrix<double, SIZE, 1> dStar = A * xStar;
-    Matrix<double, SIZE, 1> r = d - dStar;
-    Matrix<double, SIZE, 1> e = A.getInverse() * r;
+) -> Vector<double, SIZE> {
+    Vector<double, SIZE> dStar = A * xStar;
+    Vector<double, SIZE> r = d - dStar;
+    Vector<double, SIZE> e = A.getInverse() * r;
 
     return e;
 }
@@ -86,7 +86,7 @@ auto test_alghorithm() -> void {
     d.fillRandomValues(-10, 10, .1);
 
     Vector<double, SIZE> x = findSolve<SIZE>(a, b, c, d);
-    Matrix<double, SIZE, 1> error = checkSolve(A, x, d);
+    Vector<double, SIZE> error = checkSolve(A, x, d);
     std::cout << "Error for this test = " << error.averageValue() << '\n';
 }
 
