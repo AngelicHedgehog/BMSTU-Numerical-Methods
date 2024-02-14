@@ -5,9 +5,9 @@
 #include <cassert>
 #include <iostream>
 
-template <typename T, int HEIGHT, int WIDTH>
+template< typename T, int HEIGHT, int WIDTH >
 requires (
-    std::is_integral_v<T> &&
+    std::is_floating_point_v<T> &&
     HEIGHT > 0 &&
     WIDTH > 0
 )
@@ -17,8 +17,9 @@ public:
 
     virtual ~Matrix() {};
 
-    virtual auto fillRandomValues(const T& minValue, const T& maxValue) -> void final {
-        #define getRandValue() {rand() % (maxValue - minValue) + minValue};
+    auto fillRandomValues(const T& minValue, const T& maxValue, const T& stepValue) -> void {
+        std::size_t countValues = (maxValue - minValue) / stepValue;
+        #define getRandValue() {(rand() % static_cast<int>(countValues)) * stepValue + minValue};
 
         for (auto& row : m_matrix) {
             for (auto& element : row) {
@@ -41,30 +42,26 @@ public:
         return m_matrix[i][j];
     }
 
-    template <int WIDTH_OTHER>
-    virtual auto dot(const Matrix<T, WIDTH, WIDTH_OTHER>& other) const -> Matrix<T, HEIGHT, WIDTH_OTHER> {
+    template< int WIDTH_OTHER >
+    auto dot(const Matrix<T, WIDTH, WIDTH_OTHER>& other) const -> Matrix<T, HEIGHT, WIDTH_OTHER> {
         Matrix<T, HEIGHT, WIDTH_OTHER> matrixProduct{};
 
         for (int i = 0; i != HEIGHT; ++i) {
             for (int j = 0; j != WIDTH; ++j) {
                 for (int k = 0; k != WIDTH_OTHER; ++k) {
-                    matrixProduct[i][k] += at(i, j) * other.at(j, k);
+                    matrixProduct.at(i, k) += at(i, j) * other.at(j, k);
                 }
             }
         }
 
         return matrixProduct;
     }
-
-    virtual auto getInverse() const -> Matrix<T, WIDTH, HEIGHT> {
-
-    }
     
 protected:
     std::vector<std::vector<T>> m_matrix;
 };
 
-template <typename T, int HEIGHT, int WIDTH>
+template< typename T, int HEIGHT, int WIDTH >
 std::ostream& operator<<(std::ostream& os, const Matrix<T, HEIGHT, WIDTH>& matrix) {
     for (int i = 0; i != HEIGHT; ++i) {
         for (int j = 0; j != WIDTH; ++j) {
