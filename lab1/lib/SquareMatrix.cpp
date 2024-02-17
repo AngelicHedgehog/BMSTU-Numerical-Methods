@@ -2,54 +2,22 @@
 
 #include "Matrix.cpp"
 
+template<std::size_t SIZE>
+concept IsSizeOne = (SIZE == 1);
+
 template< typename T, std::size_t SIZE >
 requires std::is_floating_point_v<T>
 class SquareMatrix : public Matrix<T, SIZE, SIZE> {
 public:
-    SquareMatrix() {}
+    constexpr SquareMatrix() {}
 
-    SquareMatrix(const Matrix<T, SIZE, SIZE>& other) {
-        for (std::size_t row = 0; row != SIZE; ++row) {
-            for (std::size_t col = 0; col != SIZE; ++col) {
-                this->at(row, col) = other.at(row, col);
-            }
-        }
-    }
+    constexpr SquareMatrix(const Matrix<T, SIZE, SIZE>& matrix)
+    : Matrix<T, SIZE, SIZE>(matrix) {}
 
-    SquareMatrix(const std::vector<std::vector<T>>& matrix)
-    : Matrix<T, SIZE, SIZE>::m_matrix(matrix) {
-        assert(matrix.size() == SIZE);
-        for (const auto& row : matrix) {
-            assert(row.size() == SIZE);
-        }
-    }
+    constexpr SquareMatrix(const std::array<std::array<T, SIZE>, SIZE>& arrays)
+    : Matrix<T, SIZE, SIZE>::m_matrix(arrays) {}
 
-    auto operator*(const Matrix<T, SIZE, SIZE>& other) const -> SquareMatrix<T, SIZE> {
-        SquareMatrix<T, SIZE> matrixProduct{};
-        for (std::size_t i = 0; i != SIZE; ++i) {
-            for (std::size_t j = 0; j != SIZE; ++j) {
-                for (std::size_t k = 0; k != SIZE; ++k) {
-                    matrixProduct.at(i, k) += this->at(i, j) * other.at(j, k);
-                }
-            }
-        }
-        return matrixProduct;
-    }
-
-    template< std::size_t WIDTH_OTHER >
-    auto operator*(const Matrix<T, SIZE, WIDTH_OTHER>& other) const -> Matrix<T, SIZE, WIDTH_OTHER> {
-        Matrix<T, SIZE, WIDTH_OTHER> matrixProduct{};
-        for (std::size_t i = 0; i != SIZE; ++i) {
-            for (std::size_t j = 0; j != SIZE; ++j) {
-                for (std::size_t k = 0; k != WIDTH_OTHER; ++k) {
-                    matrixProduct.at(i, k) += this->at(i, j) * other.at(j, k);
-                }
-            }
-        }
-        return matrixProduct;
-    }
-
-    auto getTransposed() const -> SquareMatrix<T, SIZE> {
+    constexpr auto getTransposed() const -> SquareMatrix<T, SIZE> {
         SquareMatrix<T, SIZE> transposed{};
 
         for (std::size_t row = 0; row != SIZE; ++row) {
@@ -61,7 +29,8 @@ public:
         return transposed;
     }
 
-    auto getMinor(std::size_t minorRow, std::size_t minorCol) const -> SquareMatrix<T, SIZE - 1> {
+    constexpr auto getMinor(std::size_t minorRow, std::size_t minorCol) const
+    -> SquareMatrix<T, SIZE - 1> {
         assert(minorRow < SIZE && minorCol < SIZE);
 
         SquareMatrix<T, SIZE - 1> minor{};
@@ -75,19 +44,15 @@ public:
         return minor;
     }
 
-    template<
-        std::size_t S = SIZE,
-        class = typename std::enable_if<S == 1>::type
-    >
-    auto getDeterminant() const -> T {
+    template<std::size_t S = SIZE>
+    requires IsSizeOne<S>
+    constexpr auto getDeterminant() const -> T {
         return this->at(0, 0);
     }
 
-    template<
-        int S = SIZE,
-        class = typename std::enable_if<S != 1>::type
-    >
-    auto getDeterminant() const -> T {
+    template<std::size_t S = SIZE>
+    requires (!IsSizeOne<S>)
+    constexpr auto getDeterminant() const -> T {
         T determinant{};
 
         for (std::size_t col = 0; col != SIZE; ++col) {
@@ -100,7 +65,7 @@ public:
         return determinant;
     }
 
-    auto getInverse() const -> SquareMatrix<T, SIZE> {
+    constexpr auto getInverse() const -> SquareMatrix<T, SIZE> {
         T determinant{this->getDeterminant()};
         assert(determinant != 0);
 
