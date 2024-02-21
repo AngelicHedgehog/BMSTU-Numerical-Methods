@@ -11,8 +11,18 @@ class DiagonalMatrix : public SquareMatrix<T, SIZE> {
 public:
     constexpr DiagonalMatrix() {}
 
-    constexpr DiagonalMatrix(const Matrix<T, SIZE, SIZE>& matrix)
-    : DiagonalMatrix<T, SIZE, DIAGS>(matrix.m_matrix) {}
+    constexpr DiagonalMatrix(const Matrix<T, SIZE, SIZE>& matrix) {
+        for (std::size_t row = 0; row != SIZE; ++row) {
+            for (std::size_t col = 0; col != SIZE; ++col) {
+                T& valueCell = this->at(row, col);
+                if (&valueCell == &m_zeroValue) {
+                    assert(matrix.at(row, col) == m_zeroValue);
+                    continue;
+                }
+                valueCell = matrix.at(row, col);
+            }
+        }
+    }
 
     constexpr DiagonalMatrix(const std::array<std::array<T, SIZE>, SIZE>& arrays) {
         for (std::size_t row = 0; row != SIZE; ++row) {

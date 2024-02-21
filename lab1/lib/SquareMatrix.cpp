@@ -14,8 +14,9 @@ public:
     constexpr SquareMatrix(const Matrix<T, SIZE, SIZE>& matrix)
     : Matrix<T, SIZE, SIZE>(matrix) {}
 
-    constexpr SquareMatrix(const std::array<std::array<T, SIZE>, SIZE>& arrays)
-    : Matrix<T, SIZE, SIZE>::m_matrix(arrays) {}
+    constexpr SquareMatrix(const std::array<std::array<T, SIZE>, SIZE>& arrays) {
+        this->m_matrix = arrays;
+    }
 
     constexpr auto getTransposed() const -> SquareMatrix<T, SIZE> {
         SquareMatrix<T, SIZE> transposed{};

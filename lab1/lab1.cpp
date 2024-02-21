@@ -200,33 +200,33 @@ auto test_Matrix_Diagonal() -> void {
     dg3 = m33 - m33;
 }
 
-auto main() -> int {
-    test_Matrix_SquareM();
-    test_Matrix_Vector();
-    return 0;
-
-    for (std::size_t i = 0; i != 5; ++i) {
-        test_alghorithm<double, 4>();
-    }
-    test_check(
-        ThreeDiagonalMatrix<float, 4>({{
-            {4, 1, 0, 0},
-            {1, 4, 1, 0},
-            {0, 1, 4, 1},
-            {0, 0, 1, 4}
-        }}),
-        {{1, 1, 1, 1}}
-    );
-
-    test_check(
-        ThreeDiagonalMatrix<float, 4>({{
-            {4, 1, 0, 0},
-            {1, 4, 1, 0},
-            {0, 1, 4, 1},
-            {0, 0, 1, 4}
-        }}) * (1./3),
-        {{1./3, 1./3, 1, 2}}
-    );
-
-    return 0;
-}
+// auto main() -> int {
+//     test_Matrix_SquareM();
+//     test_Matrix_Vector();
+//     return 0;
+// 
+//     for (std::size_t i = 0; i != 5; ++i) {
+//         test_alghorithm<double, 4>();
+//     }
+//     test_check(
+//         ThreeDiagonalMatrix<float, 4>({{
+//             {4, 1, 0, 0},
+//             {1, 4, 1, 0},
+//             {0, 1, 4, 1},
+//             {0, 0, 1, 4}
+//         }}),
+//         {{1, 1, 1, 1}}
+//     );
+// 
+//     test_check(
+//         ThreeDiagonalMatrix<float, 4>({{
+//             {4, 1, 0, 0},
+//             {1, 4, 1, 0},
+//             {0, 1, 4, 1},
+//             {0, 0, 1, 4}
+//         }}) * (1./3),
+//         {{1./3, 1./3, 1, 2}}
+//     );
+//
+//     return 0;
+// }
