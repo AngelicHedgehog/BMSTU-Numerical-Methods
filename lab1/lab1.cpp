@@ -113,7 +113,98 @@ constexpr auto test_check(
     std::cout << xStar << "\n\n";
 }
 
+auto test_Matrix_SquareM() -> void {
+    Matrix<float, 2, 3> m23{{{{1, 2, 3}, {4, 5, 6}}}};
+    Matrix<float, 3, 2> m32{};
+    m32.fillRandomValues(-10, 10, 1);
+    Matrix<float, 3, 3> m33{};
+    m33.fillRandomValues(-10, 10, 1);
+
+    SquareMatrix<float, 2> sq2{{{{1, 2}, {3, 4}}}};
+    SquareMatrix<float, 3> sq3{m33};
+
+    sq3 = sq3 * sq3;
+    m23 = m23 * sq3;
+    m23 = sq2 * m23;
+    sq2 = m23 * m32;
+
+    sq3 = sq3 * 10;
+    sq3 = m33 * 10;
+
+    sq3 = sq3 + sq3;
+    sq3 = m33 + sq3;
+    sq3 = sq3 + m33;
+    sq3 = m33 + m33;
+
+    sq3 = sq3 - sq3;
+    sq3 = m33 - sq3;
+    sq3 = sq3 - m33;
+    sq3 = m33 - m33;
+}
+
+auto test_Matrix_Vector() -> void {
+    Matrix<float, 1, 3> m13{{{{4, 5, 6}}}};
+    Matrix<float, 3, 1> m31{};
+    m31.fillRandomValues(-10, 10, 1);
+    Matrix<float, 1, 1> m11{};
+    m11.fillRandomValues(-10, 10, 1);
+
+    Vector<float, 1> v1{};
+    v1.fillRandomValues(-10, 10, 1);
+    Vector<float, 3> v3{{1, 2, 3}};
+    v3 = m31;
+
+    v1 = m13 * v3;
+    v1 = v1 * m11;
+    
+    v3 = v3 * 10;
+    v3 = m31 * 10;
+
+    v3 = v3 + v3;
+    v3 = v3 + m31;
+    v3 = m31 + v3;
+    v3 = m31 + m31;
+
+    v3 = v3 - v3;
+    v3 = v3 - m31;
+    v3 = m31 - v3;
+    v3 = m31 - m31;
+}
+
+auto test_Matrix_Diagonal() -> void {
+    Matrix<float, 2, 3> m23{{{{1, 2, 3}, {4, 5, 6}}}};
+    Matrix<float, 3, 2> m32{};
+    m32.fillRandomValues(-10, 10, 1);
+    Matrix<float, 3, 3> m33{};
+    m33.fillRandomValues(-10, 10, 1);
+
+    DiagonalMatrix<float, 2, 1> dg2{{{{1, 0}, {0, 4}}}};
+    DiagonalMatrix<float, 3, 3> dg3{m33};
+
+    dg3 = dg3 * dg3;
+    m32 = dg3 * m32;
+    m23 = m23 * dg3;
+    dg3 = m32 * m23;
+
+    dg3 = dg3 * 10;
+    dg3 = m33 * 10;
+
+    dg3 = dg3 + dg3;
+    dg3 = dg3 + m33;
+    dg3 = m33 + dg3;
+    dg3 = m33 + m33;
+
+    dg3 = dg3 - dg3;
+    dg3 = dg3 - m33;
+    dg3 = m33 - dg3;
+    dg3 = m33 - m33;
+}
+
 auto main() -> int {
+    test_Matrix_SquareM();
+    test_Matrix_Vector();
+    return 0;
+
     for (std::size_t i = 0; i != 5; ++i) {
         test_alghorithm<double, 4>();
     }
