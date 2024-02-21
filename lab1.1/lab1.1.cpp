@@ -41,10 +41,11 @@ auto main() -> int {
     Vector<double, N + 2> A, B, C, D;
 
     // c | i e [1, N + 1]
-    for (std::size_t i = 0; i != N; ++i) {
+    for (std::size_t i = 0; i != N - 1; ++i) {
         C.at(i + 1) = solve.at(i);
     }
     C.at(0) = 0;
+    C.at(N) = 0;
     C.at(N + 1) = 0;
 
     // d | i e [1, N]
@@ -62,5 +63,8 @@ auto main() -> int {
         B.at(i) = B.at(i - 1) + h * (C.at(i) + C.at(i - 1));
     }
 
-    
+    std::cout << "\n\nA\tB\tC\tD\n";
+    for (std::size_t i = 1; i != N; ++i) {
+        std::cout << A.at(i) << '\t' << B.at(i) << '\t' << C.at(i) << '\t' << D.at(i) << '\n';
+    }
 }
