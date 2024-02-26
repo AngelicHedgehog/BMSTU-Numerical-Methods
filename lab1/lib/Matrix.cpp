@@ -5,7 +5,6 @@
 #include <cassert>
 #include <iostream>
 
-#include "DiagonalMatrix.cpp"
 
 template< typename T, std::size_t HEIGHT, std::size_t WIDTH >
 requires (
