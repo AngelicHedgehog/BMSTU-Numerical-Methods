@@ -1,10 +1,10 @@
 #include <cmath>
+#include <numbers>
 
 #include "../lab1/lab1.cpp"
 
 // Вариант 4. [0, π]. f(x) = 2x*cos(x/2)
 
-#define PI 3.1415
 #define N 32
 
 auto f(double x) -> double {
@@ -12,7 +12,7 @@ auto f(double x) -> double {
 }
 
 auto main() -> int {
-    double a = 0, b = PI;
+    double a = 0, b = std::numbers::pi;
     double h = (b - a) / N;
 
     Matrix<double, N + 1, 2> table{};
@@ -89,7 +89,7 @@ auto main() -> int {
     }
     splineError /= N;
 
-    std::cout << "Error of spline in centers = " << splineError << "\n\n";
+    std::cout << "Average spline error in centers = " << splineError << "\n\n";
 
     double x;
     std::cout << "Enter x from interval [" << a << ", " << b << "]: ";
