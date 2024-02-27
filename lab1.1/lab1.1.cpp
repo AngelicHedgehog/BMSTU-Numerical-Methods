@@ -87,6 +87,7 @@ auto main() -> int {
         double y_star = spline(x);
         splineError += abs(y_star - y);
     }
+    splineError /= N;
 
     std::cout << "Error of spline in centers = " << splineError << "\n\n";
 
