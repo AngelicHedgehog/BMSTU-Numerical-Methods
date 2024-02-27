@@ -1,4 +1,5 @@
 #include <cmath>
+#include <numbers>
 #include <iostream>
 
 #include "../lab1/lib/Matrix.cpp"
@@ -6,7 +7,6 @@
 // Вариант 4. [0, π]. f(x) = 2x*cos(x/2)
 
 #define EPSILON .001
-#define PI 3.1415
 
 auto f(double x) -> double {
     return 2 * x * std::cos(x / 2);
@@ -17,7 +17,7 @@ auto f_antiderivative(double x) -> double {
 }
 
 auto main() -> int {
-    double a = 0, b = PI;
+    double a = 0, b = std::numbers::pi;
     double I = f_antiderivative(b) - f_antiderivative(a);
     
     Matrix<double, 4, 3> dataTable{};
