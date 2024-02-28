@@ -5,7 +5,7 @@
 
 // Вариант 4. [0, π]. f(x) = 2x*cos(x/2)
 
-#define N 32
+#define N 10
 
 auto f(double x) -> double {
     return 2 * x * std::cos(x / 2);
@@ -21,11 +21,11 @@ auto main() -> int {
         table.at(i, 1) = f(table.at(i, 0));
     }
 
-    for (std::size_t i = 0; i != N + 1; ++i) {
-        std::cout << "(x" << i << ", y" << i << ")\t= ("
-                  << table.at(i, 0) << ",\t" << table.at(i, 1) << ")\n";
-    }
-    std::cout << '\n';
+    // for (std::size_t i = 0; i != N + 1; ++i) {
+    //     std::cout << "(x" << i << ", y" << i << ")\t= ("
+    //               << table.at(i, 0) << ",\t" << table.at(i, 1) << ")\n";
+    // }
+    // std::cout << '\n';
 
     ThreeDiagonalMatrix<double, N - 1> SLAE{};
     Vector<double, N - 1> SLAEright{};
@@ -58,17 +58,17 @@ auto main() -> int {
     B.at(N - 1) = (table.at(N, 1) - table.at(N - 1, 1)) * C.at(N - 1) * 2 / 3;
     D.at(N - 1) = - C.at(N) / (3 * h);
 
-    for (std::size_t i = 0; i != N; ++i) {
-        std::cout << "(a" << i <<
-                    ", b" << i <<
-                    ", c" << i <<
-                    ", d" << i << ")\t= (" <<
-                    A.at(i) << ",\t" <<
-                    B.at(i) << ",\t" <<
-                    C.at(i) << ",\t" <<
-                    D.at(i) << ")\n";
-    }
-    std::cout << '\n';
+    // for (std::size_t i = 0; i != N; ++i) {
+    //     std::cout << "(a" << i <<
+    //                 ", b" << i <<
+    //                 ", c" << i <<
+    //                 ", d" << i << ")\t= (" <<
+    //                 A.at(i) << ",\t" <<
+    //                 B.at(i) << ",\t" <<
+    //                 C.at(i) << ",\t" <<
+    //                 D.at(i) << ")\n";
+    // }
+    // std::cout << '\n';
 
     auto spline = [&](double x) {
         int i = (x - a) * N / (b - a);
@@ -76,25 +76,36 @@ auto main() -> int {
         double res = D.at(i);
         res = res * delta_x + C.at(i);
         res = res * delta_x + B.at(i);
-        res = A.at(i);
+        res = res * delta_x + A.at(i);
         return res;
     };
 
-    double splineError = 0;
-    for (std::size_t i = 0; i != N; ++i) {
-        double x = a + (i + .5) * h;
+    // double splineError = 0;
+    // for (std::size_t i = 0; i != N; ++i) {
+    //     double x = a + (i + .5) * h;
+    //     double y = f(x);
+    //     double y_star = spline(x);
+    //     splineError += abs(y_star - y);
+    // }
+    // splineError /= N;
+
+    // std::cout << "Average spline error in centers = " << splineError << "\n\n";
+
+    // double x;
+    // std::cout << "Enter x from interval [" << a << ", " << b << "]: ";
+    // std::cin >> x;
+    // assert(a <= x && x <= b);
+    // std::cout << "Original f(" << x << ") = " << f(x) << '\n';
+    // std::cout << "Spline   f(" << x << ") = " << spline(x) << "\n\n";
+
+    std::cout << "x\t\tS(x)\t\ty(x)\t\t|S(x)-y(x)|\n";
+    for (std::size_t i = 0; i != 2 * N + 1; ++i) {
+        double x = a + h * i / 2;
+        double s = spline(x);
         double y = f(x);
-        double y_star = spline(x);
-        splineError += abs(y_star - y);
+        std::cout << x << "  \t";
+        std::cout << s << "  \t";
+        std::cout << y << "    \t";
+        std::cout << abs(s - y) << '\n';
     }
-    splineError /= N;
-
-    std::cout << "Average spline error in centers = " << splineError << "\n\n";
-
-    double x;
-    std::cout << "Enter x from interval [" << a << ", " << b << "]: ";
-    std::cin >> x;
-    assert(a <= x && x <= b);
-    std::cout << "Original f(" << x << ") = " << f(x) << '\n';
-    std::cout << "Spline   f(" << x << ") = " << spline(x) << "\n\n";
 }
