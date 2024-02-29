@@ -72,7 +72,7 @@ auto main() -> int {
         double y = f(x);
         std::cout << x << "  \t";
         std::cout << s << "  \t";
-        std::cout << y << "    \t";
+        std::cout << y << "  \t";
         std::cout << abs(s - y) << '\n';
     }
 }
