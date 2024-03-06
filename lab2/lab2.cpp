@@ -26,6 +26,7 @@ auto main() -> int {
     dataTable.at(0, 0) = 1;                         // n
     dataTable.at(1, 0) = f((a + b) / 2) * (b - a);  // I_last
     do {
+        std::size_t k = 2;
         double n = dataTable.at(0, 0) + 1;
         double h = (b - a) / n;
 
@@ -36,7 +37,7 @@ auto main() -> int {
         I *= h;
 
         dataTable.at(0, 0) = n;
-        dataTable.at(2, 0) = (I - dataTable.at(1, 0)) / (std::pow(2, n) - 1);
+        dataTable.at(2, 0) = (I - dataTable.at(1, 0)) / (std::pow(2, k) - 1);
         dataTable.at(1, 0) = I;
     } while (abs(dataTable.at(2, 0)) > EPSILON);
     dataTable.at(3, 0) = dataTable.at(1, 0) + dataTable.at(2, 0);
@@ -45,6 +46,7 @@ auto main() -> int {
     dataTable.at(0, 1) = 1;                             // n
     dataTable.at(1, 1) = ((f(a) + f(b)) / 2) * (b - a); // I_last
     do {
+        std::size_t k = 2;
         double n = dataTable.at(0, 1) + 1;
         double h = (b - a) / n;
 
@@ -55,7 +57,7 @@ auto main() -> int {
         I *= h;
 
         dataTable.at(0, 1) = n;
-        dataTable.at(2, 1) = (I - dataTable.at(1, 1)) / (std::pow(2, n) - 1);
+        dataTable.at(2, 1) = (I - dataTable.at(1, 1)) / (std::pow(2, k) - 1);
         dataTable.at(1, 1) = I;
     } while (abs(dataTable.at(2, 1)) > EPSILON);
     dataTable.at(3, 1) = dataTable.at(1, 1) + dataTable.at(2, 1);
@@ -65,6 +67,7 @@ auto main() -> int {
     dataTable.at(1, 2) = (f(a) + 4 * f((a + b) / 2) + f(b))
                        * (b - a) / 6;           // I_last
     do {
+        std::size_t k = 4;
         double n = dataTable.at(0, 2) + 1;
         double h = (b - a) / (2 * n);
 
@@ -76,7 +79,7 @@ auto main() -> int {
         I = I * h / 3;
 
         dataTable.at(0, 2) = n;
-        dataTable.at(2, 2) = (I - dataTable.at(1, 2)) / (std::pow(2, n) - 1);
+        dataTable.at(2, 2) = (I - dataTable.at(1, 2)) / (std::pow(2, k) - 1);
         dataTable.at(1, 2) = I;
     } while (abs(dataTable.at(2, 2)) > EPSILON);
     dataTable.at(3, 2) = dataTable.at(1, 2) + dataTable.at(2, 2);
