@@ -87,9 +87,9 @@ auto main() -> int {
     std::cout << "I = " << I << '\n';
     std::cout << "\t\taverage\t\ttrapez\t\tSimpson\n";
     std::cout << "n\t\t"
-              << dataTable.at(0, 0) << "\t\t"
-              << dataTable.at(0, 1) << "\t\t"
-              << dataTable.at(0, 2) << '\n'
+              << std::pow(2, dataTable.at(0, 0)) << "\t\t"
+              << std::pow(2, dataTable.at(0, 1)) << "\t\t"
+              << std::pow(2, dataTable.at(0, 2)) << '\n'
               << "I*_(h/2)\t"
               << dataTable.at(1, 0) << "\t\t"
               << dataTable.at(1, 1) << "\t\t"
