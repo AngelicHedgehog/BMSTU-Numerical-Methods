@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt 
 import numpy as np
+import math
 
 zₓ = {
     1   : 0.16,
@@ -12,6 +13,7 @@ zₓ = {
     4.5 : 15.60,
     5   : 24.86, 
 }
+n = len(zₓ) - 1
 xₒ = min(zₓ)
 xₙ = max(zₓ)
 yₒ = zₓ[xₒ]
@@ -29,7 +31,7 @@ def z_table(x: float) -> float:
 
 ### 1
 x = np.arange(xₒ, xₙ, 0.01)
-plt.plot(x, list(map(z_table, x)))
+# plt.plot(x, list(map(z_table, x)))
 plt.plot(*zip(*zₓ.items()))
 
 
@@ -66,7 +68,35 @@ print(f"{δk=}\n")
 # k = 2 =>
 #   z(x) = z₂(x) = axᵇ
 #   ln(z(x)) = ln(a) + b*ln(x)
+#   min -> sum((ln(a) + b*ln(xᵢ) - ln(yᵢ))²)
 
+A = sum(math.log(xᵢ) ** 2 for xᵢ in zₓ.keys())
+B = sum(math.log(xᵢ) for xᵢ in zₓ.keys())
+D1 = sum(math.log(yᵢ) * math.log(xᵢ) for xᵢ, yᵢ in zₓ.items())
+D2 = sum(math.log(yᵢ) for yᵢ in zₓ.values())
 
+a = math.e ** (
+    (
+        D2 -
+        (D1 * (n + 1) - D2 * B) * B /
+        (A * (n + 1) - B ** 2)
+    ) / (n + 1)
+)
+b = (
+    (D1 * (n + 1) - D2 * B) /
+    (A * (n + 1) - B ** 2)
+)
+
+SKU = math.sqrt(sum(
+    (math.log(a) + b * math.log(xᵢ) - math.log(yᵢ)) ** 2
+    for xᵢ, yᵢ in zₓ.items()
+))
+
+SKO = SKU / math.sqrt(n)
+print(f"{SKO=}")
+
+def z_new(x: float) -> float:
+    return a * x ** b
+plt.plot(x, list(map(z_new, x)))
 
 plt.show()
