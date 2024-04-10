@@ -68,35 +68,18 @@ double fi_k(CoordX x_k, double t) {
     return f(x_k - gradient_f(x_k) * t);
 }
 
-// δφₖ(t)/δt
+// φₖ'(0)
 double fi_k_t_zero(CoordX x_k) {
-    return -std::pow(f_x1(x_k), 2) -std::pow(f_x1(x_k), 2);
+    return  -std::pow(f_x1(x_k), 2) +
+            -std::pow(f_x2(x_k), 2);
 }
 
 
-// δ²φₖ(t)/δt²
+// φₖ"(0)
 double fi_k_t_t_zero(CoordX x_k) {
-    return -f_x1(x_k) * (
-                -f_x1_x1(x_k) * f_x1_x1(x_k - gradient_f(x_k) * t) +
-                -f_x1_x2(x_k) * f_x1_x2(x_k - gradient_f(x_k) * t)
-            ) +
-           -f_x2(x_k) * (
-                -f_x1_x2(x_k) * f_x1_x2(x_k - gradient_f(x_k) * t) +
-                -f_x2_x2(x_k) * f_x2_x2(x_k - gradient_f(x_k) * t)
-            );
-}
-
-// t : φₖ(t) = min(φₖ)
-double min_fi_k(CoordX x_k) {
-    double t_k = 0;
-    double t_k_last;
-
-    do {
-        t_k_last = t_k;
-        t_k = t_k_last - fi_k_t(x_k, t_k_last) / fi_k_t_t(x_k, t_k_last);
-    } while (std::abs(t_k - t_k_last) <= EPSILON);
-
-    return t_k;
+    return  f_x1_x1(x_k) * std::pow(f_x1(x_k), 2) +
+        2 * f_x1_x2(x_k) * f_x1(x_k) * f_x2(x_k) +
+            f_x2_x2(x_k) * std::pow(f_x2(x_k), 2);
 }
 
 int main() {
@@ -104,10 +87,11 @@ int main() {
     CoordX gradient = gradient_f(x_k);
 
     while (std::max(gradient.x1, gradient.x2) >= EPSILON) {
-        double t_star = min_fi_k(x_k);
+        double t_star = -fi_k_t_zero(x_k) / fi_k_t_t_zero(x_k);
         x_k = x_k - gradient * t_star;
-        
-
-        std::cout << "x1 = " << x_k.x1 << "\nx2 = " << x_k.x2 << "\n\n";
+        gradient = gradient_f(x_k);
     }
+
+    std::cout   << "(x1, x2) = (" << x_k.x1 << ", " << x_k.x2 << ")\n"
+                << "Analitic solve: (t, -t), where t tends to infinity\n";
 }
