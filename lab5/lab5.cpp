@@ -93,5 +93,5 @@ int main() {
     }
 
     std::cout   << "(x1, x2) = (" << x_k.x1 << ", " << x_k.x2 << ")\n"
-                << "Analitic solve: (t, -t), where t tends to infinity\n";
+                << "Analitic solve: (-t, t), where t tends to positive infinity.\n";
 }
