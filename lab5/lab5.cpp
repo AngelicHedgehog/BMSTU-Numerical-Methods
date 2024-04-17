@@ -85,13 +85,19 @@ double fi_k_t_t_zero(const CoordX& x_k) {
 int main() {
     CoordX x_k{1, 1};
     CoordX gradient = gradient_f(x_k);
+    std::size_t iter_count = 0;
 
     while (std::max(std::abs(gradient.x1), std::abs(gradient.x2)) >= EPSILON) {
         double t_star = -fi_k_t_zero(x_k) / fi_k_t_t_zero(x_k);
         x_k = x_k - gradient * t_star;
         gradient = gradient_f(x_k);
+
+        ++iter_count;
     }
 
+    std::cout << "Iterations count: " << iter_count << '\n';
     std::cout   << "(x1, x2) = (" << x_k.x1 << ", " << x_k.x2 << ")\n"
                 << "Analitic solve: (-t, t), where t tends to positive infinity.\n";
+
+    return 0;
 }
