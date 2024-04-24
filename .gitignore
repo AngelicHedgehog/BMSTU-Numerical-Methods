@@ -39,3 +39,4 @@
 
 .vscode/
 output/
+__pycache__/
